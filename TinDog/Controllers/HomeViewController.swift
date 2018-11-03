@@ -20,16 +20,18 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var homeWrapper: UIStackView!
     @IBOutlet weak var likeImage: UIImageView!
     @IBOutlet weak var dislikeImage: UIImageView!
-    let revealingSplashScreen = RevealingSplashView(iconImage: <#T##UIImage#>(named:"splash"), iconInitialSize: <#T##CGSize#>(width:80, height:80), backgroundColor: <#T##UIColor#>.white)
+    let revealingSplashScreen = RevealingSplashView(iconImage: UIImage(named:"splash")!, iconInitialSize: CGSize(width:80, height:80), backgroundColor: UIColor.white)
+    
+    @IBOutlet weak var nopeImage: UIImageView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //SPLASH
         self.view.addSubview(self.revealingSplashScreen)
+        
         self.revealingSplashScreen.animationType = SplashAnimationType.popAndZoomOut
         self.revealingSplashScreen.startAnimation()
-        
+
         // Do any additional setup after loading the view.
         let tittleView = NavigationImageView()
         tittleView.image = UIImage(named:"bone")
@@ -44,7 +46,7 @@ class HomeViewController: UIViewController {
     @objc func cardDragged (gestureReconizer : UIPanGestureRecognizer){
         // print ("Drag")
         
-        let cardPoint = gestureReconizer.translation(in: cardView)
+        let cardPoint = gestureReconizer.translation(in: view)
         self.cardView.center = CGPoint(x:self.view.bounds.width/2 + cardPoint.x, y:self.view.bounds.height/2 + cardPoint.y)
         
         //Rotación y escala
@@ -58,31 +60,31 @@ class HomeViewController: UIViewController {
         
         if gestureReconizer.state == .ended{
             if self.cardView.center.x < (self.view.bounds.width / 2 - 100){
-                print ("Dislike")
-                // Alfa del Like
-                self.dislikeImage.alpha = min(abs(xFromCenter)/100, 1)
+                print("dislike")
+                // Alfa del Dislike
             }
             if self.cardView.center.x > (self.view.bounds.width / 2 + 100){
-                print ("Like")
+                print("like")
                 // Alfa del Like
-                self.likeImage.alpha = min(abs(xFromCenter)/100, 1)
             }
             
             //VALORES FINALES
             //Rotación final y escala
             rotate = CGAffineTransform(rotationAngle: 0)
-            finalTransform = rotate.scaledBy(x: 1, y: 1)
+            finalTransform  = rotate.scaledBy(x: 1, y: 1)
             self.cardView.transform = finalTransform
-         
-            //Alfa del Like
             self.likeImage.alpha = 0
-            //Alfa del Dislike
             self.dislikeImage.alpha = 0
             
             self.cardView.center = CGPoint(x: self.homeWrapper.bounds.width / 2, y: (self.homeWrapper.bounds.height / 2) - 30)
         }
 
         
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
 
     /*
